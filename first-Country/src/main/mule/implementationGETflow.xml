@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="impl-get:\countries\(isocode):first-country-lookup-sapi-config" doc:id="059c4fd7-6015-4182-a998-e30f36544dd6" >
+		<ee:transform doc:name="set variable" doc:id="7718434d-4d85-4c72-86c1-c08a4a20e138" >
+			<ee:variables >
+				<ee:set-variable variableName="isocode" ><![CDATA[attributes.uriParams.'isocode']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<http:request method="GET" doc:name="Request to get Countries API" doc:id="6899c837-0c1c-4c9b-be79-590b3c5a435f" url="https://api.first.org/data/v1/countries" />
+		<logger level="INFO" doc:name="responseLogger" doc:id="4e628316-36ff-4fd8-9048-fc90750d8977" message="#[payload]" />
+		<ee:transform doc:name="responseMapping" doc:id="9c8a75a6-49fb-43d5-a82b-d3b44353d70f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var isoCode = vars.isocode 
+---
+{
+    country: payload.data[isoCode].country,
+    region: payload.data[isoCode].region,
+    iso: isoCode
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

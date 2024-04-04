@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="mobile-accounts-eapi-main" doc:id="3aadc2e6-98a3-43e0-9c62-4c1135be093d">
+        <http:listener path="/api/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <set-variable value="#[correlationId]" doc:name="Set Variable" doc:id="9dd1a1f2-c951-4825-80c6-c4a3afe6ec9f" variableName="correlationid"/>
+		<apikit:router config-ref="mobile-accounts-eapi-config" doc:id="d6f90198-871a-434d-8b71-4d390b00f94f"/>
+		<error-handler ref="lm-errorhandlerError_Handler" />
+    </flow>
+    <flow name="mobile-accounts-eapi-console">
+        <http:listener path="/console/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="mobile-accounts-eapi-config" doc:id="7847828b-3c41-412f-952b-f968f0ca759b"/>
+		<error-handler ref="lm-errorhandlerError_Handler" />
+    </flow>
+    <flow name="put:\accounts\(accountid):application\json:mobile-accounts-eapi-config">
+        <flow-ref doc:name="Flow Reference to impl-put:\accounts\(accountid):application\json:mobile-accounts-eapi-config" doc:id="b92453db-452b-4bde-b411-ff9aac7595ab" name="impl-put:\accounts\(accountid):application\json:mobile-accounts-eapi-config"/>
+		<error-handler ref="lm-errorhandlerError_Handler" />
+    </flow>
+    <flow name="delete:\accounts\(accountid):mobile-accounts-eapi-config">
+		<flow-ref doc:name="Flow Reference to impl-delete:\accounts\(accountid):mobile-accounts-eapi-config" doc:id="662cd495-1183-4e35-a9a0-6ecc7c67e2cf" name="impl-delete:\accounts\(accountid):mobile-accounts-eapi-config"/>
+		<error-handler ref="lm-errorhandlerError_Handler" />
+    </flow>
+    <flow name="get:\accounts\(accountid):mobile-accounts-eapi-config">
+        <flow-ref doc:name="Flow Reference to impl-get:\accounts\(accountid):mobile-accounts-eapi-config" doc:id="f55f25ff-1518-4865-858e-484f9d702b7c" name="impl-get:\accounts\(accountid):mobile-accounts-eapi-config"/>
+		<error-handler ref="lm-errorhandlerError_Handler" />
+    </flow>
+    <flow name="post:\accounts:application\json:mobile-accounts-eapi-config">
+        <flow-ref doc:name="Flow Reference to impl-post:\accounts:application\json:mobile-accounts-eapi-config" doc:id="97242801-451f-45d3-bf2d-bc094d16ce87" name="impl-post:\accounts:application\json:mobile-accounts-eapi-config"/>
+		<error-handler ref="lm-errorhandlerError_Handler" />
+    </flow>
+</mule>

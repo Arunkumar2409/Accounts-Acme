@@ -1,0 +1,26 @@
+%dw 2.0
+
+type auto_7a7c163d_10a8_4910_9a22_b468bd12fe00_Input_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|
+    correlationId: String, 
+    channel?: String
+  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {| accountid: String |}, 
+  version: String, 
+  localAddress: String
+|}
+

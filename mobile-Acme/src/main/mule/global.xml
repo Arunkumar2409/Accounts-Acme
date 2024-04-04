@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<api-gateway:autodiscovery apiId="19382377" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="d0abd662-8a06-4283-8b9d-13ec525a4770" flowRef="mobile-accounts-eapi-main" />
+	<import doc:name="Import" doc:id="a5c995e2-4a93-4343-8014-cc046ec45fd7" file="lm-errorhandler.xml" />
+	<apikit:config outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" doc:id="abfe6804-d5b4-4a56-83eb-60c70de2cf42" name="mobile-accounts-eapi-config" api="resource::2e05ecc9-d5ac-469b-9f73-a9279cdf16be:lm-mobile-accounts-eapi:1.0.0:raml:zip:mobile-accounts-eapi.raml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1ce3407e-9f00-4f9d-90e3-1ddc4eab33fe" >
+		<http:listener-connection host="${Listener.host}" port="${Listener.port}" readTimeout="${Listener.ReadTimeOut}" protocol="HTTPS" tlsContext="TLS_Context"/>
+	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="615d5d6b-b775-4734-909d-91d3cf4a46e3" name="env" value="config-dev" />
+	<global-property doc:name="Global Property" doc:id="edb93d53-7c7a-4e19-bf5c-1d57b4631522" name="encryptionkey" value="TrainingMule@123" />
+	<configuration-properties doc:name="Configuration properties" doc:id="d3d69e5c-27c1-4d24-b312-f833bdf415ce" file="${env}.yaml" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d1f1e9a1-af11-4fed-8814-f157ecb1a361" file="${env}.yaml" key="${encryptionkey}" />
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="6b28e4a7-b6bd-4a0f-89e8-8f47e1cd36b3" >
+		<http:request-connection protocol="HTTPS" tlsContext="TLS_Context1" host="${Request.host}"/>
+	</http:request-config>
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="382b8e83-f9a7-4a94-87bc-71377acfea3c" >
+		<tls:key-store type="${keystore.type}" path="${keystore.path}" alias="${keystore.alias}" keyPassword="${secure::keystore.keyPassword}" password="${secure::keystore.password}" />
+	</tls:context>
+	<tls:context name="TLS_Context1" doc:name="TLS Context" doc:id="0eff05e9-84ad-4e1e-9d72-c4536ec06b23" >
+		<tls:trust-store path="${truststore.path}" password="${secure::truststore.password}" type="${truststore.type}" />
+	</tls:context>
+</mule>

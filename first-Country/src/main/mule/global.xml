@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<api-gateway:autodiscovery apiId="19382342" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="14e1d7d6-0c8b-4f5a-ad14-f21f435dc882" flowRef="first-country-lookup-sapi-main" />
+	<import doc:name="Import" doc:id="005975d2-ee35-453b-a6ba-5dc5b52e91a5" file="lm-errorhandler.xml" />
+	<apikit:config outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" doc:id="11640c61-8c6b-478a-8ed7-63580e0dd556" name="first-country-lookup-sapi-config" api="resource::2e05ecc9-d5ac-469b-9f73-a9279cdf16be:lm-first-country-lookup-sapi:1.0.0:raml:zip:first-country-lookup-sapi.raml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ad5b8ef2-b2e3-4879-ad90-8cad593da2ec" >
+		<http:listener-connection host="${Listener.host}" port="${Listener.port}" readTimeout="${Listener.ReadTimeOut}" protocol="HTTPS" tlsContext="TLS_Context"/>
+	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="5e6cbd35-69f8-494f-ad3c-239c327734cd" name="env" value="config-dev" />
+	<global-property doc:name="Global Property" doc:id="a0d52d16-af1d-4c71-8bf1-6cf39714d3d1" name="encryptionkey" value="TrainingMule@123" />
+	<configuration-properties doc:name="Configuration properties" doc:id="e81775b6-b600-4ca4-91da-fe6ec4dd1cbe" file="${env}.yaml" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="df0aec19-d320-41b3-9862-bf93d67037a7" file="${env}.yaml" key="${encryptionkey}" />
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="eb61f82d-0e88-439b-9695-94a87f0019de" >
+		<tls:key-store type="${keystore.type}" path="${keystore.path}" alias="${keystore.alias}" keyPassword="${secure::keystore.keyPassword}" password="${secure::keystore.password}" />
+	</tls:context>
+</mule>

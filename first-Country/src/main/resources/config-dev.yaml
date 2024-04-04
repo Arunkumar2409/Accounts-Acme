@@ -1,0 +1,10 @@
+Listener:
+  host: "0.0.0.0"
+  port: "8082"
+  ReadTimeOut: "30000"
+keystore:
+  type: "JKS"
+  password: "![2Wm3YJhFzq/AGYUnvru3hjuh1mo+tXlSTkYPEiky3oM=]"
+  keyPassword: "![2Wm3YJhFzq/AGYUnvru3hjuh1mo+tXlSTkYPEiky3oM=]"
+  alias: "mule"
+  path: "keystore.jks"

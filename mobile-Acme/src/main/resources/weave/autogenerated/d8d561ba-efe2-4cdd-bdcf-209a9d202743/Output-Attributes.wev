@@ -1,0 +1,26 @@
+%dw 2.0
+
+type auto_d8d561ba_efe2_4cdd_bdcf_209a9d202743_Output_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|
+    correlationId: String, 
+    channel?: String
+  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {| accountid: String |}, 
+  version: String, 
+  localAddress: String
+|}
+
